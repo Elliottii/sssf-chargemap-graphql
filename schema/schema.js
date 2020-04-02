@@ -51,7 +51,7 @@ const connectionsSchema = new GraphQLObjectType({
                 }
             },
         },
-        Quantity: {type: GraphQLID},
+        Quantity: {type: GraphQLString},
     }),
 });
 
