@@ -8,6 +8,8 @@ const {
     GraphQLSchema,
     GraphQLNonNull,
     GraphQLBoolean,
+    GraphQLInt,
+    GraphQLFloat
 } = require('graphql');
 
 const connections = require('../models/connections');
@@ -51,7 +53,7 @@ const connectionsSchema = new GraphQLObjectType({
                 }
             },
         },
-        Quantity: {type: GraphQLString},
+        Quantity: {type: GraphQLInt},
     }),
 });
 
@@ -86,6 +88,17 @@ const levelsSchema = new GraphQLObjectType({
     }),
 });
 
+
+const locationSchema = new GraphQLObjectType({
+    name: 'location',
+    description: 'TODO',
+    fields: () => ({
+        id: { type: GraphQLID },
+        type: { type: GraphQLString },
+        coordinates: { type: new GraphQLList(GraphQLFloat)},
+    }),
+});
+
 const stationSchema = new GraphQLObjectType({
     name: 'station',
     description: 'Connections etc',
@@ -106,6 +119,7 @@ const stationSchema = new GraphQLObjectType({
         Town: {type: GraphQLString},
         StateOrProvince: {type: GraphQLString},
         Postcode: {type: GraphQLString},
+        Location: {type: locationSchema},
     })
 });
 
