@@ -2,38 +2,28 @@
 
 require('dotenv').config();
 const express = require('express');
-const graphqlHTTP = require('express-graphql');
-const MyGraphQLSchema = require('./schema/schema');
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const app = express();
-const db = require("./database/db");
-const connectionsRoute = require('./routes/connectionsRoute');
-const connectionTypesRoute = require('./routes/connectionTypesRoute');
-const currentTypeRoute = require('./routes/currentTypeRoute');
-const levelsRoute = require('./routes/levelsRoute');
-const stationRoute = require('./routes/stationRoute');
-const authRoute = require("./routes/authRoute");
+const cors = require('cors');
+const graphQlHttp = require('express-graphql');
+const passport = require('./utils/pass');
+const schema = require('./schema/schema');
+const db = require('./database/db');
+const server = express();
 
-app.use(cors());
-app.use(express.json()); // for parsing application/json
-app.use(express.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
+server.use(cors());
+server.use(express.json()); // for parsing application/json
+server.use(express.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 
-app.use('/connections', connectionsRoute);
-app.use('/connectionTypes', connectionTypesRoute);
-app.use('/currenttype', currentTypeRoute);
-app.use('/levels', levelsRoute);
-app.use('/station', stationRoute);
-app.use("/auth", authRoute);
+server.use(express.static('public'));
+server.use('/modules', express.static('node_modules'));
 
-app.use('/graphql', (req, res) => {
-        graphqlHTTP(async () => ({
-            schema: MyGraphQLSchema,
-            graphiql: true,
-        }))(req, res)
-    },
-);
+server.use('/graphql', (req, res) => {
+    graphQlHttp({schema, graphiql: true, context: {req, res}})(req,
+        res);
+});
 
 db.on('connected', () => {
-    app.listen(3000);
+    console.log('db connected');
 });
+
+server.listen(3000);
+

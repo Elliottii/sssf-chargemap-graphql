@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const stationController = require('../controllers/stationController');
-const passport = require("../utils/passport");
+const passport = require("../utils/pass");
 
 
 router.get('/', stationController.station_list_get);

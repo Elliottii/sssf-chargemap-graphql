@@ -1,34 +1,11 @@
-"use strict";
-const users = [
-    {
-        id: "1",
-        name: "elliotti",
-        email: "elli@otti.fi",
-        password: "12345"
-    }
-];
+const mongoose = require('mongoose');
 
+const Schema = mongoose.Schema;
 
-const getUser = (id) => {
-    const user = users.filter((usr) => {
-        if (usr.id === id) {
-            return usr;
-        }
-    });
-    return user[0];
-};
+const userSchema = new Schema({
+    username: {type: String, unique: true},
+    password: {type: String, required: true},
+    full_name: {type: String, required: true},
+});
 
-const getUserLogin = (email) => {
-    const user = users.filter((usr) => {
-        if (usr.email === email) {
-            return usr;
-        }
-    });
-    return user[0];
-};
-
-module.exports = {
-    users,
-    getUser,
-    getUserLogin,
-};
+module.exports = mongoose.model('User', userSchema);
